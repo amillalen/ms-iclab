@@ -1,12 +1,17 @@
 
 def last_stage
 
+def isReleaseBranch(branchName){
+   return brachName.startWith("release/");
+}
 pipeline {
     agent any
     tools {
         maven '3.8.6'
     }
     stages {
+        if (!isRelease()){
+
         stage("build & test") {
           steps{
             echo "build & test"
@@ -81,18 +86,16 @@ pipeline {
              )
            }
         }
-
+       }
         stage('Paso Notificación Slack') {
             steps {
                 echo 'Notificando por Slack...'
                 slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Éxito/Success]."
             }
         }
-
-
-
+      
     }   
-
+    
     post {
         failure {
                 slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Error/Fail]."
