@@ -10,7 +10,7 @@ pipeline {
         maven '3.8.6'
     }
     stages {
-        if (!isRelease()){
+        if (!isRelease("${env.BRANCH_NAME}")){
 
         stage("build & test") {
           steps{
