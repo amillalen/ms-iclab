@@ -4,7 +4,7 @@ def last_stage
 pipeline {
     agent any
     tools {
-        gradle '7.6-rc3'
+        maven '3.8.6'
     }
     stages {
         stage("gradle build & test") {
@@ -12,7 +12,7 @@ pipeline {
             echo "build & test"
             script {
               last_stage = env.STAGE_NAME
-              sh "gradle build"
+              sh "./mvnw clean package -e"
             }
           }
         }
@@ -36,7 +36,7 @@ pipeline {
              echo "run"
              script{
                last_stage = env.STAGE_NAME
-               sh "nohup gradle bootRun > /tmp/mscovid.log 2>&1 &"
+               sh "./mvnw spring-boot:run  > /tmp/mscovid.log 2>&1 &"
              }
            }
         }
@@ -73,7 +73,7 @@ pipeline {
                  packages: [[$class: 'MavenPackage',
                        mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1'],
                        mavenAssetList: [
-                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/build/libs//DevOpsUsach2020-0.0.1.jar"]
+                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]
                        ] 
                    ]
                  ]
@@ -85,7 +85,7 @@ pipeline {
         stage('Paso Notificación Slack') {
             steps {
                 echo 'Notificando por Slack...'
-                slackSend channel: 'C044QF4MH4N', message: "Build Success: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución exitosa."
+                slackSend channel: 'D0435L5H7KJ', message: "Build Success: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución exitosa."
             }
         }
 
@@ -95,7 +95,7 @@ pipeline {
 
     post {
         failure {
-                slackSend channel: 'C044QF4MH4N', message: "Build Failure: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución fallida en stage[${last_stage}]."
+                slackSend channel: 'D0435L5H7KJ', message: "Build Failure: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución fallida en stage[${last_stage}]."
         }
     }
 
