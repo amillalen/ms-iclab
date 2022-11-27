@@ -1,8 +1,8 @@
 
 def last_stage
 
-def isReleaseBranch(branchName){
-   return brachName.startWith("release/");
+def isReleaseBranch(){
+   return "${env.BRANCH_NAME}".startWith("release/");
 }
 pipeline {
     agent any
@@ -10,9 +10,9 @@ pipeline {
         maven '3.8.6'
     }
     stages {
-        if (!isRelease("${env.BRANCH_NAME}")){
 
         stage("build & test") {
+          when{ expression{ !isReleaseBranch() } }
           steps{
             echo "build & test"
             script {
@@ -23,6 +23,7 @@ pipeline {
         }
 
         stage('sonar') {
+            when{ expression{ !isReleaseBranch() } }
             steps {
                 echo 'sonar...'
                 script{
@@ -37,6 +38,7 @@ pipeline {
         
 
         stage("run"){
+           when{ expression{ !isReleaseBranch() } }
            steps{
              echo "run"
              script{
@@ -47,6 +49,7 @@ pipeline {
         }
 
         stage('wait serivice start') {
+           when{ expression{ !isReleaseBranch() } }
            steps{
            timeout(5) {
              waitUntil {
@@ -59,6 +62,7 @@ pipeline {
           }
         }
         stage('test api rest') {
+           when{ expression{ !isReleaseBranch() } }
            steps{
                script { last_stage = env.STAGE_NAME  }
                echo 'test...'
@@ -68,6 +72,7 @@ pipeline {
 
 
         stage('nexus') {
+           when{ expression{ !isReleaseBranch() } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
@@ -86,7 +91,7 @@ pipeline {
              )
            }
         }
-       }
+        
         stage('Paso Notificación Slack') {
             steps {
                 echo 'Notificando por Slack...'
