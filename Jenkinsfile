@@ -7,7 +7,7 @@ pipeline {
         maven '3.8.6'
     }
     stages {
-        stage("gradle build & test") {
+        stage("build & test") {
           steps{
             echo "build & test"
             script {
@@ -31,7 +31,7 @@ pipeline {
         }
         
 
-        stage("gradle run"){
+        stage("run"){
            steps{
              echo "run"
              script{
