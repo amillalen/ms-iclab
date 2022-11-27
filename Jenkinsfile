@@ -32,8 +32,8 @@ pipeline {
         
 
         stage("gradle run"){
-           echo "run"
            steps{
+             echo "run"
              script{
                last_stage = env.STAGE_NAME
                sh "nohup gradle bootRun > /tmp/mscovid.log 2>&1 &"
@@ -101,4 +101,3 @@ pipeline {
 
 
  
-}
