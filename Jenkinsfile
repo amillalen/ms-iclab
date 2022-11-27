@@ -85,7 +85,7 @@ pipeline {
         stage('Paso Notificación Slack') {
             steps {
                 echo 'Notificando por Slack...'
-                slackSend channel: 'D0435L5H7KJ', message: "Build Success: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución exitosa."
+                slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Éxito/Success]."
             }
         }
 
@@ -95,7 +95,7 @@ pipeline {
 
     post {
         failure {
-                slackSend channel: 'D0435L5H7KJ', message: "Build Failure: [Nombre Alumno][${JOB_NAME}][gradle] Ejecución fallida en stage[${last_stage}]."
+                slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Error/Fail]."
         }
     }
 
