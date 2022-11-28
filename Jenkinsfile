@@ -85,7 +85,12 @@ pipeline {
           }
         } 
 
-
+        stage('update version and tag') {
+           when{ expression{ is_master_branch } }
+           steps{
+              sh "./mvnw -B -Darguments="-Dmaven.test.skip=true" -Dresume=false release:prepare release:perform"
+           }        
+        }
         stage('nexus') {
            when{ expression{ is_master_branch } }
            steps{
