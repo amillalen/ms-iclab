@@ -116,7 +116,6 @@ pipeline {
            steps{
               script { last_stage = env.STAGE_NAME  }
               git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
-              sh 'git pull --ff-only'
               sh 'git fetch --all'
               echo '${env.BRANCH_NAME}'
               sh 'git merge ${env.BRANCH_NAME}'
