@@ -115,10 +115,10 @@ pipeline {
            when{ expression{ is_release_branch } }
            steps{
               script { last_stage = env.STAGE_NAME  }
-              sh 'git pull'
+              sh 'git pull --ff-only'
               sh 'git fetch'
               sh 'git checkout master'
-              sh 'git pull'
+              sh 'git pull --ff-only'
               sh 'git fetch'
               echo '${env.BRANCH_NAME}'
               sh 'git merge ${env.BRANCH_NAME}'
