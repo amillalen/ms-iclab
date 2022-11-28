@@ -87,7 +87,7 @@ pipeline {
 
 
         stage('nexus') {
-           when{ expression{ !is_master_branch } }
+           when{ expression{ is_master_branch } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
@@ -96,9 +96,9 @@ pipeline {
                  nexusInstanceId: 'nexus01',
                  nexusRepositoryId: 'devops-usach-nexus',
                  packages: [[$class: 'MavenPackage',
-                       mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1'],
+                       mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '${pomVersion}'],
                        mavenAssetList: [
-                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]
+                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/build/DevOpsUsach2020-${pomVersion}.jar"]
                        ] 
                    ]
                  ]
