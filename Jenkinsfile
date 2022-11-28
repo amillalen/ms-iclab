@@ -3,8 +3,10 @@ def last_stage
 
 def is_release_branch
 def is_master_branch
-
 def run_log_file
+
+def pom
+
 pipeline {
     agent any
     tools {
@@ -19,6 +21,8 @@ pipeline {
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
                 is_master_branch = "${env.BRANCH_NAME}" == "master"
+                pom = readMavenPom file: ''
+                echo "name is ${pom.name} and version is ${pom.version}"
              }
           }
         }
