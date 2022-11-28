@@ -69,7 +69,7 @@ pipeline {
            timeout(5) {
              waitUntil {
                script {
-                 def exitCode = sh script:"grep -s Started ${run_log_file}", returnStatus:true
+                 def exitCode = sh script:"grep Started ${run_log_file}", returnStatus:true
                  return (exitCode == 0);
                }
              }
