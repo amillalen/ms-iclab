@@ -21,7 +21,7 @@ pipeline {
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
                 is_master_branch = "${env.BRANCH_NAME}" == "master"  
-                pomVersion = sh returnStdout: true, script: './mvnw  org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version |grep -v "[INFO]"'
+                pomVersion = sh returnStdout: true, script: './mvnw  org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version |grep -v "INFO"|cut -d"-" -f1'
                 echo "version is ${pomVersion}"
              }
           }
