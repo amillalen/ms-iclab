@@ -1,6 +1,8 @@
 
 def last_stage
 
+def is_branch_release
+
 def isReleaseBranch(){
    return "${env.BRANCH_NAME}".startWith("release/");
 }
@@ -10,9 +12,16 @@ pipeline {
         maven '3.8.6'
     }
     stages {
-
+        stage("enviroment settings"){
+          steps{ 
+             script {
+                def matched = "${env.BRANCH_NAME}" =~/(release\/.*)/
+                is_branch_release = matched.size()>0 
+             }
+          }
+        }
         stage("build & test") {
-          when{ expression{ !isReleaseBranch() } }
+          when{ expression{ !is_branch_release } }
           steps{
             echo "build & test"
             script {
@@ -23,7 +32,7 @@ pipeline {
         }
 
         stage('sonar') {
-            when{ expression{ !isReleaseBranch() } }
+            when{ expression{ !is_branch_release } }
             steps {
                 echo 'sonar...'
                 script{
@@ -38,7 +47,7 @@ pipeline {
         
 
         stage("run"){
-           when{ expression{ !isReleaseBranch() } }
+           when{ expression{ !is_branch_release } }
            steps{
              echo "run"
              script{
@@ -49,7 +58,7 @@ pipeline {
         }
 
         stage('wait serivice start') {
-           when{ expression{ !isReleaseBranch() } }
+           when{ expression{ !is_branch_release ) } }
            steps{
            timeout(5) {
              waitUntil {
@@ -62,7 +71,7 @@ pipeline {
           }
         }
         stage('test api rest') {
-           when{ expression{ !isReleaseBranch() } }
+           when{ expression{ !is_branch_release } }
            steps{
                script { last_stage = env.STAGE_NAME  }
                echo 'test...'
@@ -72,7 +81,7 @@ pipeline {
 
 
         stage('nexus') {
-           when{ expression{ !isReleaseBranch() } }
+           when{ expression{ !is_branch_release } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
