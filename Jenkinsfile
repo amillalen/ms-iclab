@@ -111,7 +111,16 @@ pipeline {
              )
            }
         }
-        
+        stage('merge to main'){
+           when{ expression{ is_release_branch } }
+           steps{
+              sh 'git checkout master'
+              sh 'git pull'
+              sh 'git fetch'
+              echo '${env.BRANCH_NAME}'
+              sh 'git merge ${env.BRANCH_NAME}'
+           }
+        } 
         stage('Paso Notificación Slack') {
             steps {
                 echo 'Notificando por Slack...'
