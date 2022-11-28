@@ -15,8 +15,7 @@ pipeline {
         stage("enviroment settings"){
           steps{ 
              script {
-                def matched = "${env.BRANCH_NAME}" =~/(release\/.*)/
-                is_branch_release = matched.size()>0 
+                is_branch_release = "${env.BRANCH_NAME}" ==~/release\/.*/
              }
           }
         }
