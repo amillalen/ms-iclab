@@ -58,7 +58,7 @@ pipeline {
         }
 
         stage('wait serivice start') {
-           when{ expression{ !is_branch_release ) } }
+           when{ expression{ !is_branch_release  } }
            steps{
            timeout(5) {
              waitUntil {
