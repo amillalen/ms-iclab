@@ -26,7 +26,6 @@ pipeline {
              }
           }
         }
-/*
         stage("build & test") {
           when{ expression{ !is_master_branch } }
           steps{
@@ -112,7 +111,6 @@ pipeline {
              )
            }
         }
-*/
         stage('merge to main'){
            when{ expression{ is_release_branch } }
            steps{
@@ -120,15 +118,15 @@ pipeline {
               script { last_stage = env.STAGE_NAME  }
               git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
-//                  sh 'git branch --track master origin/master'
                   sh "git branch --track ${env.BRANCH_NAME} origin/${env.BRANCH_NAME}"
                   sh "git checkout ${env.BRANCH_NAME}"
                   sh "git pull origin ${env.BRANCH_NAME}"
                   sh 'git checkout master'
                   sh 'git pull origin master'
-                sh "git merge ${env.BRANCH_NAME}"
+                  sh "git merge ${env.BRANCH_NAME}"
+                  sh "git push origin master"
               }
-              echo '${env.BRANCH_NAME}'
+              echo "merged ${env.BRANCH_NAME}"
            }
         } 
         stage('Paso Notificación Slack') {
