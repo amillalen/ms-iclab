@@ -26,6 +26,7 @@ pipeline {
              }
           }
         }
+/*
         stage("build & test") {
           when{ expression{ !is_master_branch } }
           steps{
@@ -111,6 +112,7 @@ pipeline {
              )
            }
         }
+*/
         stage('merge to main'){
            when{ expression{ is_release_branch } }
            steps{
@@ -120,6 +122,7 @@ pipeline {
               sshagent(['ssh_key']) {
 //                  sh 'git branch --track master origin/master'
                   sh "git branch --track ${env.BRANCH_NAME} origin/${env.BRANCH_NAME}"
+                  sn "git checkout master"
                   sh 'git pull --all --no-rebase'
                   sh 'git fetch --all'
                 sh "git merge ${env.BRANCH_NAME}"
