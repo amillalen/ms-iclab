@@ -18,7 +18,6 @@
 	</properties>
         <scm>
            <developerConnection>scm:git:${gitRepositoryUrl}</developerConnection>
-          <tag>V@{project.version}</tag>
   </scm>
 	<dependencies>
 		<dependency>
