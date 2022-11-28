@@ -3,6 +3,8 @@ def last_stage
 
 def is_release_branch
 def is_master_branch
+
+def run_log_file
 pipeline {
     agent any
     tools {
@@ -13,6 +15,7 @@ pipeline {
           steps{ 
              script {
                 sh "printenv"
+                run_log_file="/tmp/mscovid-${BUILD_TAG}.log"
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
                 is_master_branch = "${env.BRANCH_NAME}" == "master"
@@ -51,7 +54,7 @@ pipeline {
              echo "run"
              script{
                last_stage = env.STAGE_NAME
-               sh "./mvnw spring-boot:run  > /tmp/mscovid.log 2>&1 &"
+               sh "./mvnw spring-boot:run  > ${run_log_file} 2>&1 &"
              }
            }
         }
@@ -62,7 +65,7 @@ pipeline {
            timeout(5) {
              waitUntil {
                script {
-                 def exitCode = sh script:"grep -s Started /tmp/mscovid.log", returnStatus:true
+                 def exitCode = sh script:"grep -s Started ${run_log_file}", returnStatus:true
                  return (exitCode == 0);
                }
              }
