@@ -5,7 +5,7 @@ def is_release_branch
 def is_master_branch
 def run_log_file
 
-def pom
+def pomVersion
 
 pipeline {
     agent any
@@ -20,9 +20,9 @@ pipeline {
                 run_log_file="/tmp/mscovid-${BUILD_TAG}.log"
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
-                is_master_branch = "${env.BRANCH_NAME}" == "master"
-                pom = readMavenPom file: ''
-                echo "name is ${pom.name} and version is ${pom.version}"
+                is_master_branch = "${env.BRANCH_NAME}" == "master"  
+                pomVersion = sh returnStdout: true, script: './mvnw  org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version |grep -v "[INFO]"'
+                echo "version is ${pomVersion}"
              }
           }
         }
