@@ -114,7 +114,7 @@ pipeline {
         stage('merge to main'){
            when{ expression{ is_release_branch } }
            steps{
-              
+              cleanWs() 
               script { last_stage = env.STAGE_NAME  }
               git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
