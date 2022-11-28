@@ -15,6 +15,7 @@ pipeline {
         stage("enviroment settings"){
           steps{ 
              script {
+                last_stage = env.STAGE_NAME
                 is_branch_release = "${env.BRANCH_NAME}" ==~/release\/.*/
              }
           }
