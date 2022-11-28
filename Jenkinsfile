@@ -88,6 +88,7 @@ pipeline {
         stage('update version and tag') {
            when{ expression{ is_master_branch } }
            steps{
+              git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
                  sh './mvnw -B -Darguments="-Dmaven.test.skip=true" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false release:prepare release:perform'
               }
@@ -118,7 +119,7 @@ pipeline {
            steps{
               cleanWs() 
               script { last_stage = env.STAGE_NAME  }
-              git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
+              git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
                   sh "git branch --track ${env.BRANCH_NAME} origin/${env.BRANCH_NAME}"
                   sh "git checkout ${env.BRANCH_NAME}"
