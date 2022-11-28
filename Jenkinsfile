@@ -88,7 +88,9 @@ pipeline {
         stage('update version and tag') {
            when{ expression{ is_master_branch } }
            steps{
-              sh './mvnw -B -Darguments="-Dmaven.test.skip=true" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false release:prepare release:perform'
+              sshagent(['ssh_key']) {
+                 sh './mvnw -B -Darguments="-Dmaven.test.skip=true" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false release:prepare release:perform'
+              }
            }        
         }
         stage('nexus') {
