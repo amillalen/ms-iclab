@@ -1,11 +1,8 @@
 
 def last_stage
 
-def is_branch_release
-
-def isReleaseBranch(){
-   return "${env.BRANCH_NAME}".startWith("release/");
-}
+def is_release_branch
+def is_master_branch
 pipeline {
     agent any
     tools {
@@ -15,13 +12,15 @@ pipeline {
         stage("enviroment settings"){
           steps{ 
              script {
+                sh "printenv"
                 last_stage = env.STAGE_NAME
-                is_branch_release = "${env.BRANCH_NAME}" ==~/release\/.*/
+                is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
+                is_master_branch = "${env.BRANCH_NAME}" == "master"
              }
           }
         }
         stage("build & test") {
-          when{ expression{ !is_branch_release } }
+          when{ expression{ !is_master_branch } }
           steps{
             echo "build & test"
             script {
@@ -32,7 +31,7 @@ pipeline {
         }
 
         stage('sonar') {
-            when{ expression{ !is_branch_release } }
+            when{ expression{ !is_master_branch } }
             steps {
                 echo 'sonar...'
                 script{
@@ -47,7 +46,7 @@ pipeline {
         
 
         stage("run"){
-           when{ expression{ !is_branch_release } }
+           when{ expression{ !is_master_branch } }
            steps{
              echo "run"
              script{
@@ -58,7 +57,7 @@ pipeline {
         }
 
         stage('wait serivice start') {
-           when{ expression{ !is_branch_release  } }
+           when{ expression{ !is_master_branch  } }
            steps{
            timeout(5) {
              waitUntil {
@@ -71,7 +70,7 @@ pipeline {
           }
         }
         stage('test api rest') {
-           when{ expression{ !is_branch_release } }
+           when{ expression{ !is_master_branch } }
            steps{
                script { last_stage = env.STAGE_NAME  }
                echo 'test...'
@@ -81,7 +80,7 @@ pipeline {
 
 
         stage('nexus') {
-           when{ expression{ !is_branch_release } }
+           when{ expression{ !is_master_branch } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
