@@ -117,10 +117,10 @@ pipeline {
               script { last_stage = env.STAGE_NAME  }
               git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_Key']) {
-                sh 'git fetch -all'
+                sh 'git fetch --all'
+                sh 'git merge ${env.BRANCH_NAME}'
               }
               echo '${env.BRANCH_NAME}'
-              sh 'git merge ${env.BRANCH_NAME}'
            }
         } 
         stage('Paso Notificación Slack') {
