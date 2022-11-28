@@ -118,7 +118,7 @@ pipeline {
               git credentialsId: 'ssh_key', url: ' git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
                 sh 'git fetch --all'
-                sh 'git merge ${env.BRANCH_NAME}'
+                sh "git merge ${env.BRANCH_NAME}"
               }
               echo '${env.BRANCH_NAME}'
            }
