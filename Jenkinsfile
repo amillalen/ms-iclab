@@ -90,7 +90,7 @@ pipeline {
            steps{
               git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
-                 sh './mvnw -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true -DtagNameFormat=V@{project.version}" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false release:prepare release:perform'
+                 sh './mvnw -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true -DtagNameFormat=V@{project.version}" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false release:prepare release:perform'
               }
            }        
         }
