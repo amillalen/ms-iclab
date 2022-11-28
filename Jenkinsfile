@@ -116,7 +116,7 @@ pipeline {
            steps{
               script { last_stage = env.STAGE_NAME  }
               sh 'git pull --ff-only'
-              sh 'git fetch'
+              sh 'git fetch --all'
               sh 'git checkout master'
               sh 'git pull --ff-only'
               sh 'git fetch'
