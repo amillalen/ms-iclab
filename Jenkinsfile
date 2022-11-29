@@ -93,7 +93,7 @@ pipeline {
                allOf {
                    branch "master"
                    not {
-                       changelog "[skip ci].*"
+                       changelog "\\[skip ci\\].*"
                    }
                } 
            }
@@ -114,7 +114,15 @@ pipeline {
            }        
         }
         stage('nexus') {
-           when{ expression{ is_master_branch && !skip_ci } }
+           when{
+               allOf {
+                   branch "master"
+                   not {
+                       changelog "\\[skip ci\\].*"
+                   }
+               }
+           }
+//           when{ expression{ is_master_branch && !skip_ci } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
