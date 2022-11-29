@@ -90,7 +90,7 @@ pipeline {
         stage('update version and tag') {
            when{
                allOf {
-                   is_release_branch
+                   branch "release\/*"
                    not {
                        changelog "\\[skip ci\\].*"
                    }
