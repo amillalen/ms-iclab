@@ -4,6 +4,7 @@ def last_stage
 def is_release_branch
 def is_master_branch
 def run_log_file
+def skip_ci
 
 def pomVersion
 
@@ -17,6 +18,8 @@ pipeline {
           steps{ 
              script {
                 sh "printenv"
+                def exitCode = sh script:"git log -1|grep 'skip ci'", returnStatus:true
+                skip_ci=(exitCode==0)
                 run_log_file="/tmp/mscovid-${BUILD_TAG}.log"
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
@@ -86,7 +89,7 @@ pipeline {
         } 
 
         stage('update version and tag') {
-           when{ expression{ is_master_branch } }
+           when{ expression{ is_master_branch && !skip_ci } }
            steps{
               git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
               sshagent(['ssh_key']) {
@@ -95,7 +98,7 @@ pipeline {
            }        
         }
         stage('nexus') {
-           when{ expression{ is_master_branch } }
+           when{ expression{ is_master_branch && !skip_ci } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
