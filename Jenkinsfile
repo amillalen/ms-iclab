@@ -89,7 +89,15 @@ pipeline {
         } 
 
         stage('update version and tag') {
-           when{ expression{ is_master_branch && !skip_ci } }
+           when{
+               allOf {
+                   branch "master"
+                   not {
+                       changelog "[skip ci].*"
+                   }
+               } 
+           }
+          // when{ expression{ is_master_branch && !skip_ci } }
            steps{
               git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
 //              wrap([$class: 'ConfigFileBuildWrapper',
