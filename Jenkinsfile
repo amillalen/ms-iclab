@@ -96,7 +96,7 @@ pipeline {
         managedFiles: [
             [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
               //sshagent(['ssh_key']) {
-                 sh './mvnw -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DpushChanges=false -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
+                 sh "./mvnw -s ${pwd()}/.m2/setting.xml -B -Darguments='-Dmaven.test.skip=true -Dmaven.deploy.skip=true' -DpushChanges=false -DtagNameFormat='V@{project.version}' -DgitRepositoryUrl=git@github.com:amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix='[skip ci]' release:prepare release:perform"
               }
            }        
         }
