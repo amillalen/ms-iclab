@@ -131,7 +131,7 @@ pipeline {
                  packages: [[$class: 'MavenPackage',
                        mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '${pomVersion}'],
                        mavenAssetList: [
-                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/build/DevOpsUsach2020-${pomVersion}.jar"]
+                          [classifier: '', extension: 'jar', filePath: "${WORKSPACE}/checkout/build/DevOpsUsach2020-${pomVersion}.jar"]
                        ] 
                    ]
                  ]
