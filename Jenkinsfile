@@ -93,7 +93,7 @@ pipeline {
            }
           // when{ expression{ is_master_branch && !skip_ci } }
            steps{
-//             git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
+             git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: "${env.BRANCH_NAME}"
 //              wrap([$class: 'ConfigFileBuildWrapper',
 //        managedFiles: [
 //            [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
