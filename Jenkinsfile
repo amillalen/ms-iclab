@@ -103,7 +103,7 @@ pipeline {
                   usernameVariable: 'GIT_USERNAME',
                   passwordVariable: 'GIT_PASSWORD'
                 ]]){
-                 sh './mvnw -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
+                 sh 'mvn --batch-mode  -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
              }
            }
                    
