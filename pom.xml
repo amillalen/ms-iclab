@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.devopsusach2020</groupId>
 	<artifactId>DevOpsUsach2020</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>0.0.11</version>
 	<name>DevOpsUsach2020</name>
 	<description>Proyecto de ejemplo para el desarrollo del diplomado DevOps Universidad de Santiago de Chile 2020</description>
 
@@ -18,7 +18,7 @@
 	</properties>
         <scm>
            <developerConnection>scm:git:${gitRepositoryUrl}</developerConnection>
-    <tag>HEAD</tag>
+    <tag>V0.0.11</tag>
   </scm>
 	<dependencies>
 		<dependency>
