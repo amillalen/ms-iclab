@@ -18,6 +18,8 @@ pipeline {
           steps{ 
              script {
                 sh "printenv"
+                def exitCode = sh script:"git log -1|grep 'skip ci'", returnStatus:true
+                skip_ci=(exitCode==0)
                 run_log_file="/tmp/mscovid-${BUILD_TAG}.log"
                 last_stage = env.STAGE_NAME
                 is_release_branch = "${env.BRANCH_NAME}" ==~/release\/.*/
@@ -89,7 +91,7 @@ pipeline {
 */
         stage('update version and tag') {
            when{
-              expression{ is_release_branch && !skip_ci} 
+              expression{ is_release_branch && !skip_ci } 
            }
           // when{ expression{ is_master_branch && !skip_ci } }
            steps{
