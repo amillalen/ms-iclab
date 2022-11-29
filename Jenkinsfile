@@ -97,7 +97,7 @@ pipeline {
 //            [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
               //sshagent(['ssh_key']) {
               withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                  credentialsId: 'amillalen github', 
+                  credentialsId: 'github user and token', 
                   usernameVariable: 'GIT_USERNAME',
                   passwordVariable: 'GIT_PASSWORD'
                 ]]){
