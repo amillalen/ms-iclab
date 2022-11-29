@@ -98,16 +98,16 @@ pipeline {
           // when{ expression{ is_master_branch && !skip_ci } }
            steps{
               git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'master'
-              wrap([$class: 'ConfigFileBuildWrapper',
-        managedFiles: [
-            [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
+//              wrap([$class: 'ConfigFileBuildWrapper',
+//        managedFiles: [
+//            [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
               //sshagent(['ssh_key']) {
-//              withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-//                  credentialsId: 'github user and token', 
-//                  usernameVariable: 'GIT_USERNAME',
-//                  passwordVariable: 'GIT_PASSWORD'
-//                ]]){
-                 sh "./mvnw -s ${pwd()}/.m2/setting.xml -B -Darguments='-Dmaven.test.skip=true -Dmaven.deploy.skip=true' -Dproject.scm.id=github -DtagNameFormat='V@{project.version}' -DgitRepositoryUrl=https://amillalen@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix='[skip ci]' release:prepare release:perform"
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                  credentialsId: 'github user and token', 
+                  usernameVariable: 'GIT_USERNAME',
+                  passwordVariable: 'GIT_PASSWORD'
+                ]]){
+                 sh './mvnw -B -Darguments='-Dmaven.test.skip=true -Dmaven.deploy.skip=true' -DtagNameFormat='V@{project.version}' -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix='[skip ci]' release:prepare release:perform"
              }
            }        
         }
