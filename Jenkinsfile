@@ -102,13 +102,12 @@ pipeline {
         managedFiles: [
             [fileId: '397422bf-0b6d-4ff3-9123-4ada281eb2db', targetLocation: "${pwd()}/.m2/setting.xml"]]]) {
               //sshagent(['ssh_key']) {
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                  credentialsId: 'github user and token', 
-                  usernameVariable: 'GIT_USERNAME',
+//              withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+//                  credentialsId: 'github user and token', 
+//                  usernameVariable: 'GIT_USERNAME',
 //                  passwordVariable: 'GIT_PASSWORD'
-                ]]){
-                 sh "./mvnw -s ${pwd()}/.m2/setting.xml -B -Darguments='-Dmaven.test.skip=true -Dmaven.deploy.skip=true' -Dproject.scm.id=github -DtagNameFormat='V@{project.version}' -DgitRepositoryUrl=https://${env.GIT_USERNAME}github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix='[skip ci]' release:prepare release:perform"
-               }
+//                ]]){
+                 sh "./mvnw -s ${pwd()}/.m2/setting.xml -B -Darguments='-Dmaven.test.skip=true -Dmaven.deploy.skip=true' -Dproject.scm.id=github -DtagNameFormat='V@{project.version}' -DgitRepositoryUrl=https://amillalen@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix='[skip ci]' release:prepare release:perform"
              }
            }        
         }
