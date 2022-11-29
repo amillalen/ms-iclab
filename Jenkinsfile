@@ -105,7 +105,7 @@ pipeline {
                   usernameVariable: 'GIT_USERNAME',
                   passwordVariable: 'GIT_PASSWORD'
                 ]]){
-                 sh 'mvn --batch-mode  -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
+                 sh 'mvn  -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
              }
            }
                    
@@ -139,7 +139,7 @@ pipeline {
            }
         }
         stage('merge to main'){
-           when{ expression{ is_release_branch } }
+           when{ expression{ is_release_branch && !skip_ci } }
            steps{
               cleanWs() 
               script { last_stage = env.STAGE_NAME  }
