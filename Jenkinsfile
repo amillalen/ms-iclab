@@ -103,7 +103,8 @@ pipeline {
               //sshagent(['ssh_key']) {
               withCredentials([[$class: 'UsernamePasswordMultiBinding', 
                   credentialsId: 'github user and token', 
-                  usernameVariable: 'GIT_USERNAME',
+               
+   usernameVariable: 'GIT_USERNAME',
                   passwordVariable: 'GIT_PASSWORD'
                 ]]){
                  sh 'mvn  -B -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true" -DtagNameFormat="V@{project.version}" -DgitRepositoryUrl=https://$GIT_USERNAME:$GIT_PASSWORD@github.com/amillalen/ms-iclab.git -Dresume=false -DscmCommentPrefix="[skip ci]" release:prepare release:perform'
@@ -120,7 +121,6 @@ pipeline {
                    }
                }
            }
-//           when{ expression{ is_master_branch && !skip_ci } }
            steps{
             script{ last_stage = env.STAGE_NAME }
             echo 'nexus...'
@@ -158,6 +158,11 @@ pipeline {
            }
         } 
         stage('Paso Notificación Slack') {
+            when{ 
+                 not {
+                       changelog "\\[skip ci\\].*"
+                   }               
+            }
             steps {
                 echo 'Notificando por Slack...'
                 slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Éxito/Success]."
