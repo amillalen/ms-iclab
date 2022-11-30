@@ -156,16 +156,33 @@ pipeline {
               }
               echo "merged ${env.BRANCH_NAME}"
            }
-        } 
+        }
+        stage('merge to develop'){
+           when{ expression{ is_release_branch && !skip_ci } }
+           steps{
+              cleanWs()
+              script { last_stage = env.STAGE_NAME  }
+              git credentialsId: 'ssh_key', url: 'git@github.com:amillalen/ms-iclab.git', branch: 'develop'
+              sshagent(['ssh_key']) {
+                  sh "git branch --track ${env.BRANCH_NAME} origin/${env.BRANCH_NAME}"
+                  sh "git checkout ${env.BRANCH_NAME}"
+                  sh "git pull origin ${env.BRANCH_NAME}"
+                  sh 'git checkout develop'
+                  sh 'git pull origin develop'
+                  sh "git merge ${env.BRANCH_NAME}"
+                  sh "git push origin develop"
+              }
+              echo "merged ${env.BRANCH_NAME}"
+           }
+        }
+ 
         stage('Paso Notificación Slack') {
             when{ 
-                 not {
-                       changelog "\\[skip ci\\].*"
-                   }               
+               expression{ !skip_ci }
             }
             steps {
                 echo 'Notificando por Slack...'
-                slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Éxito/Success]."
+                slackSend channel: 'C04CJ6KN37F', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Éxito/Success]."
             }
         }
       
@@ -173,7 +190,7 @@ pipeline {
     
     post {
         failure {
-                slackSend channel: 'D0435L5H7KJ', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Error/Fail]."
+                slackSend channel: 'C04CJ6KN37F', message: "[Grupo1][Pipeline IC/CD][Rama: ${env.BRANCH_NAME}][Stage: ${last_stage}][Resultado: Error/Fail]."
         }
     }
 
